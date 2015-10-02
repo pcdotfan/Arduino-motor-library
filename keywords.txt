@@ -1,0 +1,9 @@
+Motor		KEYWORD1
+
+brake		KEYWORD2
+
+speed		KEYWORD2
+
+GetBrake		KEYWORD2
+
+GetSpeed	KEYWORD2
