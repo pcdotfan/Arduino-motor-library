@@ -16,12 +16,20 @@ Motor::Motor(unsigned char IN1,unsigned char IN2,unsigned char ENA)
 	pinMode(In1,OUTPUT);
 	pinMode(In2,OUTPUT);
 	pinMode(Ena,OUTPUT);
-	BrakeSign=0;                   //默认无刹车
+	brakeSign=0;   //默认无刹车
+  direction=0;   //默认正向     
 }
 
+/*改变刹车设置*/
 void Motor::brake(bool Brake)
 {
-	BrakeSign=Brake;
+	brakeSign=Brake;
+}
+
+/*设置电机方向*/
+void Motor::SetDirection(bool Direction)
+{
+  direction=Direction;
 }
 
 /*
@@ -35,22 +43,25 @@ IN1 IN2 ENA   OUT1、OUT2 输出
 0   1   PWM   反转调速    
 ------------------------------
 */
-void Motor::speed(int SpeedIn)
+void Motor::Speed(int SpeedIn)
 {
-  Speed=constrain(SpeedIn,-255,255);
-  if(Speed>0){
+  speed=constrain(SpeedIn,-255,255);
+  if(direction!=0){
+    speed=-speed;
+  }
+  if(speed>0){
     digitalWrite(In1,HIGH);
     digitalWrite(In2,LOW);
-    analogWrite(Ena,Speed);
+    analogWrite(Ena,speed);
   }
   else 
-  	if(Speed<0){
+  	if(speed<0){
       digitalWrite(In1,LOW);
       digitalWrite(In2,HIGH);
-      analogWrite(Ena,-Speed);
+      analogWrite(Ena,-speed);
       }
       else {
-        if(BrakeSign!=0){
+        if(brakeSign!=0){
            digitalWrite(In1,LOW);
            digitalWrite(In2,LOW);
          }
@@ -63,10 +74,15 @@ void Motor::speed(int SpeedIn)
 
 bool Motor::GetBrake(void)
 {
-	return BrakeSign;
+	return brakeSign;
 }
 
 int Motor::GetSpeed(void)
 {
-	return Speed;
+	return speed;
+}
+
+bool Motor::GetDirection(void)
+{
+  return direction;
 }
