@@ -21,7 +21,7 @@ Motor::Motor(unsigned char IN1,unsigned char IN2,unsigned char ENA)
 }
 
 /*改变刹车设置*/
-void Motor::Brake(bool Brake)
+void Motor::brake(bool Brake)
 {
 	brakeSign=Brake;
 }
