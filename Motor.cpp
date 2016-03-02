@@ -1,35 +1,35 @@
-//Arduino Motor Library - Version 0.1
+﻿//Arduino Motor Library - Version 0.1
 
 #if ARDUINO >= 100
-  #include "Arduino.h"
+    #include "Arduino.h"
 #else
-  #include "WProgram.h"
+    #include "WProgram.h"
 #endif
 
 #include <Motor.h>
 
 Motor::Motor(unsigned char IN1,unsigned char IN2,unsigned char ENA) 
 {
-	In1=IN1;
-	In2=IN2;
-	Ena=ENA;
-	pinMode(In1,OUTPUT);
-	pinMode(In2,OUTPUT);
-	pinMode(Ena,OUTPUT);
-	brakeSign=0;   //默认无刹车
-  direction=0;   //默认正向     
+	_IN1=IN1;
+	_IN2=IN2;
+	_ENA=ENA;
+	pinMode(_IN1,OUTPUT);
+	pinMode(_IN2,OUTPUT);
+	pinMode(_ENA,OUTPUT);
+	_brakeSign=0;   //默认无刹车
+  	_direction=0;   //默认正向     
 }
 
 /*改变刹车设置*/
-void Motor::brake(bool Brake)
+void Motor::setBrake(bool brake)
 {
-	brakeSign=Brake;
+	_brakeSign=brake;
 }
 
 /*设置电机方向*/
-void Motor::SetDirection(bool Direction)
+void Motor::setDirection(bool direction)
 {
-  direction=Direction;
+    _direction=direction;
 }
 
 /*
@@ -43,46 +43,46 @@ IN1 IN2 ENA   OUT1、OUT2 输出
 0   1   PWM   反转调速    
 ------------------------------
 */
-void Motor::Speed(int SpeedIn)
+void Motor::setSpeed(int speedIn)
 {
-  speed=constrain(SpeedIn,-255,255);
-  if(direction!=0){
-    speed=-speed;
-  }
-  if(speed>0){
-    digitalWrite(In1,HIGH);
-    digitalWrite(In2,LOW);
-    analogWrite(Ena,speed);
-  }
-  else 
-  	if(speed<0){
-      digitalWrite(In1,LOW);
-      digitalWrite(In2,HIGH);
-      analogWrite(Ena,-speed);
-      }
-      else {
-        if(brakeSign!=0){
-           digitalWrite(In1,LOW);
-           digitalWrite(In2,LOW);
-         }
-         else {
-           digitalWrite(In1,HIGH);
-           digitalWrite(In2,HIGH);
-         }
-      }  
+    _speed=constrain(speedIn,-255,255);
+    if(_direction!=0){
+        _speed=-_speed;
+    }
+    if(_speed>0){
+        digitalWrite(_IN1,HIGH);
+        digitalWrite(_IN2,LOW);
+        analogWrite(_ENA,_speed);
+    }
+    else 
+  	if(_speed<0){
+        digitalWrite(_IN1,LOW);
+        digitalWrite(_IN2,HIGH);
+        analogWrite(_ENA,-_speed);
+     }
+     else {
+        if(_brakeSign!=0){
+            digitalWrite(_IN1,LOW);
+            digitalWrite(_IN2,LOW);
+        }
+        else{
+            digitalWrite(_IN1,HIGH);
+            digitalWrite(_IN2,HIGH);
+        }
+    }  
 }
 
-bool Motor::GetBrake(void)
+bool Motor::getBrake(void)
 {
-	return brakeSign;
+    return _brakeSign;
 }
 
-int Motor::GetSpeed(void)
+int Motor::getSpeed(void)
 {
-	return speed;
+	return _speed;
 }
 
-bool Motor::GetDirection(void)
+bool Motor::getDirection(void)
 {
-  return direction;
+    return _direction;
 }
